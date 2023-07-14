@@ -1,6 +1,16 @@
+import 'react-native-gesture-handler';
+import React, { useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar, StyleSheet, ImageBackground, Switch, Text, TextInput, View, TouchableOpacity, SafeAreaView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
-export default function App() {
+const Stack = createStackNavigator();
+
+
+
+function HomeScreen({ navigation }) {
+
+  const [emailText, setEmailText] = useState("");
 
   return (
     <View style={styles.container}>
@@ -28,7 +38,9 @@ export default function App() {
               <View style={styles.signUpContainer}>
                 <TextInput
                   style={styles.emailInput}
-                  value="Your email address"
+                  placeholder="Your email address"
+                  onChangeText={emailText => setEmailText(emailText)}
+                  defaultValue={emailText}
                 />
 
                 <View style={styles.newsletterContainer}>
@@ -41,7 +53,7 @@ export default function App() {
                   </View>
                 </View>
 
-                <TouchableOpacity style={styles.signUp}>
+                <TouchableOpacity style={styles.signUp} onPress={() => navigation.navigate("Sign up", { email: emailText })}>
                   <Text style={styles.signUpText}>Sign up</Text>
                 </TouchableOpacity>
               </View>
@@ -52,6 +64,27 @@ export default function App() {
       </ImageBackground>
       <StatusBar style="auto" />
     </View>
+  );
+}
+
+function SignUpScreen({ route, navigation }) {
+  return (
+    <View style={styles.container}>
+      <Text>{route.params.email}</Text>
+    </View>
+  );
+}
+
+
+export default function App() {
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" options={{ headerShown: false }} component={HomeScreen} />
+        <Stack.Screen name="Sign up" component={SignUpScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
