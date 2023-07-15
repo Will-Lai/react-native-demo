@@ -2,3 +2,6 @@
 .dist
 .DS_Store
 .vscode
+./**/nodes_modules
+
+./calculator
